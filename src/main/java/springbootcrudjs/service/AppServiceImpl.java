@@ -16,7 +16,7 @@ public class AppServiceImpl implements AppService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
 
-    @Autowired
+
     public AppServiceImpl(RoleRepository roleRepository, UserRepository userRepository) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;

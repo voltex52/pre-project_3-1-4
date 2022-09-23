@@ -14,7 +14,6 @@ public class RestAppController {
 
     private final AppService appService;
 
-    @Autowired
     public RestAppController(AppService appService) {
         this.appService = appService;
     }

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 public class AppController {
     private final AppService appService;
 
-    @Autowired
     public AppController(AppService appService) {
         this.appService = appService;
     }

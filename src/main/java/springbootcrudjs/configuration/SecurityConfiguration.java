@@ -18,13 +18,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final AppService appService;
     private final SuccessUserHandler successUserHandler;
 
-    @Autowired
+
     public SecurityConfiguration(AppService appService, SuccessUserHandler successUserHandler) {
         this.appService = appService;
         this.successUserHandler = successUserHandler;
     }
 
-    @Autowired
+
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(appService).passwordEncoder(passwordEncoder());
     }
