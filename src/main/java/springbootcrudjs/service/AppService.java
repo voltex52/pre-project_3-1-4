@@ -16,6 +16,10 @@ public interface AppService extends UserDetailsService {
 
      void saveUser(User user, SortedSet<String> rolesList);
 
+     void updateUser(User user, SortedSet<String> rolesList);
+
      void deleteUserById(int id);
+
+     User passwordCoder(User user);
 
 }

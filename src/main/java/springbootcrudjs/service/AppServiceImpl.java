@@ -1,9 +1,10 @@
 package springbootcrudjs.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
+import springbootcrudjs.dao.RoleDao;
+import springbootcrudjs.dao.UserDao;
 import springbootcrudjs.model.User;
-import springbootcrudjs.repository.RoleRepository;
-import springbootcrudjs.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -13,41 +14,61 @@ import java.util.*;
 @Service
 public class AppServiceImpl implements AppService {
 
-    private final RoleRepository roleRepository;
-    private final UserRepository userRepository;
+    private final RoleDao roleDao;
+    private final UserDao userDao;
+
+    private final PasswordEncoder passwordEncoder;
 
 
-    public AppServiceImpl(RoleRepository roleRepository, UserRepository userRepository) {
-        this.roleRepository = roleRepository;
-        this.userRepository = userRepository;
+    public AppServiceImpl(RoleDao roleDao, UserDao userDao, PasswordEncoder passwordEncoder) {
+        this.roleDao = roleDao;
+        this.userDao = userDao;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public User passwordCoder(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return user;
     }
 
     @Override
     public List<User> findAllUsers() {
-        return userRepository.findAll();
+        return userDao.findAll();
     }
 
     @Override
     public User findUserById(int id) {
-        return userRepository.findById(id).get();
+        return userDao.findById(id);
     }
 
     @Override
     public User findUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userDao.findByUsername(username);
     }
 
+    @Transactional
     @Override
     public void saveUser(User user, SortedSet<String> rolesList) {
         for(String role : rolesList) {
-            user.addRoleToUser(roleRepository.findAllByName(role).get(0));
+            user.addRoleToUser(roleDao.findAllByName(role).get(0));
         }
-        userRepository.save(user);
+        userDao.save(passwordCoder(user));
     }
 
+    @Transactional
+    @Override
+    public void updateUser(User user, SortedSet<String> rolesList) {
+        for(String role : rolesList) {
+            user.addRoleToUser(roleDao.findAllByName(role).get(0));
+        }
+        userDao.updateUser(passwordCoder(user));
+    }
+
+    @Transactional
     @Override
     public void deleteUserById(int id) {
-        userRepository.deleteById(id);
+        userDao.deleteById(id);
     }
 
 

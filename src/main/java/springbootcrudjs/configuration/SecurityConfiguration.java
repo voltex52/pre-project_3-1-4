@@ -1,6 +1,8 @@
 package springbootcrudjs.configuration;
 
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import springbootcrudjs.configuration.handler.SuccessUserHandler;
 import springbootcrudjs.service.AppService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +42,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .successHandler(successUserHandler);
     }
 
+//    @Bean
+//    public static NoOpPasswordEncoder passwordEncoder() {
+//        return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+//    }
+
     @Bean
-    public static NoOpPasswordEncoder passwordEncoder() {
-        return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
     }
 }
